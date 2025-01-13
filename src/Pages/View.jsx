@@ -3,10 +3,12 @@ import Header from '../Components/Header'
 import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToWishlist } from '../redux/slices/WishlistSlice'
+import { addToCart } from '../redux/slices/cartSlice'
 
 
 
 const View = () => {
+    const userCart = useSelector(state => state.cartReducer)
     const dispatch = useDispatch()
     const userWishlist = useSelector(state=>state.wishlistReducer)
     const [product,setProduct] = useState({})
@@ -34,6 +36,18 @@ const View = () => {
        
       }
 
+      const handleCart = ()=>{
+        dispatch(addToCart(product))
+        const existingProduct = userCart?.find(item=>item?.id ==id)
+        if(existingProduct){
+            alert("Product quantity is incrementing!!")
+
+            }else{
+            alert("Product added to cart !!")
+        }
+       
+      }
+
        
 
  
@@ -49,14 +63,14 @@ const View = () => {
         <img className='ms-5' width={'450px'} height={'200px'} src={product?.thumbnail} alt="" />
         <div className='flex justify-between mt-5 '>
             <button onClick={handleWishlist} className='bg-blue-600 text-white p-2'>Add to wishlist</button>
-            <button className='bg-green-600 text-white p-2'>Add to Cart</button>
+            <button onClick={handleCart} className='bg-green-600 text-white p-2'>Add to Cart</button>
     
         </div>
    </div>
     <div>
         <h3 className='font-bold'>PID : {product?.id}</h3>
         <h1 className='text-4xl font-bold'>{product?.title}</h1>
-        <h4 className='font-bold text-red-600 text-2xl'>$ 250</h4>
+        <h4 className='font-bold text-red-600 text-2xl'>$ {product?.price}</h4>
         <h4>Brand : {product?.brand}</h4>
         <h4>Category : {product?.category}</h4>
         <p>
